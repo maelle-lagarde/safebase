@@ -10,7 +10,7 @@ class dbManagement extends Database {
         try {
             await this.connect();
 
-            const [rows] = await this.connection.query('SHOW DATABASES');
+            const [rows] = await this.connection.query('SELECT id, user, host, name, port, type FROM db_info');
             console.log(rows);
 
             await this.disconnect();
@@ -25,7 +25,7 @@ class dbManagement extends Database {
         }
     }
 
-    // SELECT databases by id
+    // SELECT database by id
     async findDatabaseById(id) {
         // console.log('Database ID:', request.params.id);
         try {

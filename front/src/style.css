@@ -51,41 +51,33 @@ nav li a:hover {
   color: #D0BCFF;
 }
 
-.databases-page {
+.wrapper {
   position: relative;
   min-height: 100vh;
 }
 
-.databases-page h1 {
+.wrapper h1 {
   margin-bottom: 80px;
 }
 
-.databases-list, .databases-result {
+.wrapper-result {
   position: relative;
   left: 20%;
   width: 78%;
 }
 
-.databases-list ul {
-  display: flex;
-  flex-direction: row;
-  gap: 200px;
-  text-align: center;
+.wrapper-result table {
+  width: 100%;
 }
 
-.databases-result ul {
-  display: flex;
-  flex-direction: row;
-  gap: 200px;
-  text-align: center;
+.wrapper-result table td {
+  padding: 10px;
+  color: #D0BCFF;
 }
 
-.databases-list li {
-  list-style: none;
-}
-
-.databases-result li {
-  list-style: none;
+.wrapper-result tbody tr {
+  border: 1px solid #D0BCFF;
+  border-radius: 5px;
 }
 
 #add-db-btn {
@@ -108,8 +100,93 @@ nav li a:hover {
   margin-right: 10px;
 }
 
-.databases-result {
-  border: 1px solid #C7C7C7;
+.select-db {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.select-1, .select-2 {
+  display: flex;
+  flex-direction: column;
+}
+
+.backup-select select {
+  padding: 10px 40px;
+}
+
+.backup-select label {
+  border: 2px solid #D0BCFF;
   border-radius: 5px;
-  margin-top: 40px;
+  margin-bottom: 10px;
+  padding: 10px 40px;
+}
+
+.trash-icon {
+  background-color: #141218 !important;
+}
+
+.trash-icon:hover {
+  border: 1px solid #D0BCFF;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex; 
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: #141218;
+  padding: 20px;
+  border: 2px solid #D0BCFF;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  max-width: 500px;
+  width: 100%;
+}
+
+.modal-content input {
+  background-color: #141218;
+  border: 1px solid #D0BCFF;
+  border-radius: 5px;
+  color: #D0BCFF;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.modal-content select {
+  background-color: #141218;
+  border: 1px solid #D0BCFF;
+  border-radius: 5px;
+  color: #D0BCFF;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+#save-btn {
+  padding: 8px 45px;
+  background-color: #D0BCFF;
+  color: #381E72;
+  border: 2px solid transparent;
+}
+
+#cancel-btn {
+  padding: 8px 45px;
+  background-color: #2B2634;
+  color: #D0BCFF;
+  border: 2px solid #D0BCFF;
+}
+
+.input-add-db {
+  display: flex;
+  flex-direction: column;
 }

@@ -36,7 +36,7 @@ async function routes(fastify) {
   });
 
   // ajouter une base de données.
-  fastify.post('/database/create', async (request, reply) => {
+  fastify.post('/databases', async (request, reply) => {
     const database = new dbManagement();
     try {
       const { user, host, name, port, type, password } = request.body;

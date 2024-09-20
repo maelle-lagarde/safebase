@@ -1,13 +1,14 @@
-import React from 'react';  // Ajoutez cet import
+import React from 'react';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import { BrowserRouter } from 'react-router-dom';  // Importez BrowserRouter
+import { BrowserRouter } from 'react-router-dom'; 
 import App from './App.jsx';
+import 'react-toastify/dist/ReactToastify.css';
 import './index.css';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <BrowserRouter>  {/* Enveloppez App dans BrowserRouter */}
+    <BrowserRouter> 
       <App />
     </BrowserRouter>
   </StrictMode>,
