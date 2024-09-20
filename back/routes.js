@@ -21,6 +21,26 @@ async function routes(fastify) {
     }
   });
 
+  fastify.post('/create-database', async (request, reply) => {
+    const database = new dbManagement();
+    try {
+        const { user, host, name, port, type, password } = request.body;
+
+        // Vérifier les champs requis
+        if (!user || !host || !name || !port || !type || !password) {
+            return reply.status(400).send({ error: 'Missing required fields' });
+        }
+
+        // Appeler directement createDb
+        const addDb = await database.createDb({ user, host, name, port, type, password });
+        console.log(addDb);
+        reply.send(addDb);
+    } catch (err) {
+        console.error('Error creating database', err);
+        reply.status(500).send({ error: err.message });
+    }
+  });
+
   // afficher une base de données spécifique. 
   fastify.get('/databases/:id', async (request, reply) => {
     const database = new dbManagement();

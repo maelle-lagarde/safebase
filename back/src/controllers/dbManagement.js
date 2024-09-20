@@ -60,36 +60,39 @@ class dbManagement extends Database {
         }
     }
 
-    // UPDATE database by id
-    async updateDatabase(id, { user, host, name, port, type, password }) {
+    // CREATE new database.
+    async createDb({ user, host, name, port, type, password }) {
         try {
-            await this.connect();
+            await this.connectToServer();
     
-            const updateQuery = `
-            UPDATE db_info
-            SET user = ?, host = ?, name = ?, port = ?, type = ?, password = ?
-            WHERE id = ?
-        `;
-        const [updateResult] = await this.connection.query(updateQuery, [user, host, name, port, type, password, id]);
-
-        if (updateResult.affectedRows === 0) {
-            throw new Error(`No database found with id ${id}`);
-        }
-
-        const selectQuery = 'SELECT * FROM db_info WHERE id = ?';
-        const [rows] = await this.connection.query(selectQuery, [id]);
-
-        console.log('Database updated and specific row retrieved:', rows);
-        return rows[0];
+            // Créer la base de données
+            const createDbQuery = `CREATE DATABASE IF NOT EXISTS \`${name}\`;`;
+            await this.connection.query(createDbQuery);
+            console.log(`Base de données ${name} créée avec succès.`);
+    
+            // Créer l'utilisateur
+            const createUserQuery = `CREATE USER IF NOT EXISTS '${user}'@'${host}' IDENTIFIED BY '${password}';`;
+            await this.connection.query(createUserQuery);
+            console.log(`Utilisateur ${user} créé avec succès.`);
+    
+            // Accorder les privilèges
+            const grantPrivilegesQuery = `GRANT ALL PRIVILEGES ON \`${name}\`.* TO '${user}'@'${host}';`;
+            await this.connection.query(grantPrivilegesQuery);
+            console.log(`Privilèges accordés à l'utilisateur ${user} sur la base de données ${name}.`);
+    
+            return { message: `Base de données ${name} créée avec succès avec l'utilisateur ${user} sur l'hôte ${host}.` };
         } catch (error) {
-            console.error('Error updating data in database:', error);
+            console.error('Erreur lors de la création de la base de données ou de l’utilisateur:', error);
             throw error;
         } finally {
             if (this.connection) {
                 await this.disconnect();
+                console.log('Connexion fermée.');
             }
         }
     }
+    
+    
 
     // DELETE database by id 
     async deleteDatabse(id) {

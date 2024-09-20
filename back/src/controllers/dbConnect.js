@@ -8,6 +8,27 @@ class Database {
     this.connection = null;
   }
 
+  async connectToServer() {
+    try {
+        this.connection = await mysql.createConnection({
+            host: process.env.DB_HOST || 'localhost',
+            user: process.env.DB_USER || 'root',
+            password: process.env.DB_PASSWORD || 'root',
+            port: process.env.DB_PORT || 3306,
+        });
+
+        console.log('Connecté au server MySQL');
+
+        // Test de connexion
+        await this.connection.query('SELECT 1'); // Vérification simple
+        console.log('La connexion au serveur MySQL est opérationnelle.');
+    } catch (err) {
+        console.error('Erreur lors de la connexion au server MySQL:', err.message, err.stack);
+        throw err;
+    }
+}
+
+
   // Connect to MySQL database
   async connect() {
     try {

@@ -24,7 +24,7 @@ export default function AddDbModal({ isOpen, onClose }) {
     e.preventDefault();
 
     try {
-      const response = await fetch('http://localhost:3000/databases', {
+      const response = await fetch('http://localhost:3000/create-database', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -122,8 +122,8 @@ export default function AddDbModal({ isOpen, onClose }) {
               required
               placeholder="type"
             >
-              <option value="MySql">MySQL</option>
-              <option value="Postgres">PostgreSQL</option>
+              <option value="MySQL">MySQL</option>
+              <option value="PostgreSQL">PostgreSQL</option>
             </select>
           </div>
 
