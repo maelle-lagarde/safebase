@@ -8,7 +8,7 @@ async function routes(fastify) {
   });
 
 
-  // afficher toutes les databases enregistrées. 
+  // afficher toutes les info de bdd enregistrées dans bd_info
   fastify.get('/databases', async (request, reply) => {
     const databases = new dbManagement();
     try {
@@ -21,17 +21,17 @@ async function routes(fastify) {
     }
   });
 
-  fastify.post('/create-database', async (request, reply) => {
+
+  // créer une base de données.
+  fastify.post('/database-create', async (request, reply) => {
     const database = new dbManagement();
     try {
         const { user, host, name, port, type, password } = request.body;
 
-        // Vérifier les champs requis
         if (!user || !host || !name || !port || !type || !password) {
             return reply.status(400).send({ error: 'Missing required fields' });
         }
 
-        // Appeler directement createDb
         const addDb = await database.createDb({ user, host, name, port, type, password });
         console.log(addDb);
         reply.send(addDb);
@@ -55,22 +55,6 @@ async function routes(fastify) {
     }
   });
 
-  // ajouter une base de données.
-  fastify.post('/databases', async (request, reply) => {
-    const database = new dbManagement();
-    try {
-      const { user, host, name, port, type, password } = request.body;
-        if (!user || !host || !name || !port || !type || !password) {
-            return reply.status(400).send({ error: 'Missing required fields' });
-        }
-      const addDb = await database.addDatabase({ user, host, name, port, type, password });
-      console.log(addDb);
-      reply.send(addDb);
-    } catch (err) {
-      console.error('Error adding database', err);
-      reply.status(500).send({ error: err.message });
-    }
-  });
 
   // éditer une base de données.
   fastify.put('/database/update/:id', async (request, reply) => {
@@ -91,12 +75,12 @@ async function routes(fastify) {
     }
   });
 
-  // supprimer une base de données.
+  // supprimer les infos d'une base de données spécifiques.
   fastify.delete('/database/delete/:id', async (request, reply) => {
     const database = new dbManagement();
     const dbId = request.params.id;
     try {
-      const result = await database.deleteDatabse(dbId);
+      const result = await database.deleteDatabase(dbId);
       if (result.affectedRows === 0) {
         reply.status(404).send({ message: 'Database not found' });
       } else {

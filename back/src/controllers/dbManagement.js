@@ -5,7 +5,7 @@ class dbManagement extends Database {
         super();
     }
 
-    // SHOW all databases
+    // SHOW all databases info from db_info
     async  findDatabases(){
         try {
             await this.connect();
@@ -25,6 +25,7 @@ class dbManagement extends Database {
         }
     }
 
+
     // SELECT database by id
     async findDatabaseById(id) {
         // console.log('Database ID:', request.params.id);
@@ -43,7 +44,7 @@ class dbManagement extends Database {
         }
     }
 
-    // INSERT new database
+    // INSERT new database info in db_info
     async addDatabase({ user, host, name, port, type, password }) {
         try {
             await this.connect();
@@ -64,22 +65,22 @@ class dbManagement extends Database {
     async createDb({ user, host, name, port, type, password }) {
         try {
             await this.connectToServer();
-    
-            // Créer la base de données
+
             const createDbQuery = `CREATE DATABASE IF NOT EXISTS \`${name}\`;`;
             await this.connection.query(createDbQuery);
             console.log(`Base de données ${name} créée avec succès.`);
-    
-            // Créer l'utilisateur
+
             const createUserQuery = `CREATE USER IF NOT EXISTS '${user}'@'${host}' IDENTIFIED BY '${password}';`;
             await this.connection.query(createUserQuery);
             console.log(`Utilisateur ${user} créé avec succès.`);
-    
-            // Accorder les privilèges
+
             const grantPrivilegesQuery = `GRANT ALL PRIVILEGES ON \`${name}\`.* TO '${user}'@'${host}';`;
             await this.connection.query(grantPrivilegesQuery);
             console.log(`Privilèges accordés à l'utilisateur ${user} sur la base de données ${name}.`);
-    
+
+            await this.addDatabase({ user, host, name, port, type, password });
+            console.log(`Informations ajoutées dans db_info pour la base de données ${name}.`);
+
             return { message: `Base de données ${name} créée avec succès avec l'utilisateur ${user} sur l'hôte ${host}.` };
         } catch (error) {
             console.error('Erreur lors de la création de la base de données ou de l’utilisateur:', error);
@@ -91,20 +92,35 @@ class dbManagement extends Database {
             }
         }
     }
-    
-    
 
-    // DELETE database by id 
-    async deleteDatabse(id) {
+    
+    // DELETE database by id
+    async deleteDatabase(id) {
+        let dbInfo;
         try {
             await this.connect();
+            
+            const [rows] = await this.connection.query('SELECT * FROM db_info WHERE id = ?', [id]);
+            if (rows.length === 0) {
+                throw new Error('Database not found');
+            }
+            dbInfo = rows[0];
+
+            // supprime les infos de bdd dans db_info
             const deleteQuery = 'DELETE FROM db_info WHERE id = ?';
             const [result] = await this.connection.query(deleteQuery, [id]);
+            console.log('Database entry deleted from db_info:', result);
 
-            console.log('Database deleted:', result);
+            await this.connectToServer();
+
+            // supprime la bdd du server
+            const dropDbQuery = `DROP DATABASE IF EXISTS \`${dbInfo.name}\`;`;
+            await this.connection.query(dropDbQuery);
+            console.log(`Base de données ${dbInfo.name} supprimée avec succès.`);
+
             return result;
         } catch (error) {
-            console.error('Error deleting data from database:', error);
+            console.error('Error deleting database:', error);
             throw error;
         } finally {
             if (this.connection) {

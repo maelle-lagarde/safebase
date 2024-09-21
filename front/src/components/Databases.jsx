@@ -83,8 +83,8 @@ export default function Databases() {
                         </tr>
                     </thead>
                     <tbody>
-                        {databases.map((db) => (
-                            <tr key={db.id}>
+                        {databases.map((db, index) => (
+                            <tr key={index}>
                             <td>{db.id}</td>
                             <td>{db.user}</td>
                             <td>{db.host}</td>

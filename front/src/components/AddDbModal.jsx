@@ -24,7 +24,7 @@ export default function AddDbModal({ isOpen, onClose }) {
     e.preventDefault();
 
     try {
-      const response = await fetch('http://localhost:3000/create-database', {
+      const response = await fetch('http://localhost:3000/database-create', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
