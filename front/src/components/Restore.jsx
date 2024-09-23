@@ -1,5 +1,5 @@
 import React from "react";
-import '../style.css';
+import '../assets/style/style.css';
 
 export default function Restore () {
     return (

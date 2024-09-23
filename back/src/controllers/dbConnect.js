@@ -20,7 +20,7 @@ class Database {
 
         console.log('Connecté au server MySQL');
 
-        // test de connexion.
+        // test connexion.
         await this.connection.query('SELECT 1');
         console.log('La connexion au serveur MySQL est opérationnelle.');
     } catch (err) {

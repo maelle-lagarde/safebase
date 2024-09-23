@@ -9,7 +9,7 @@ async function routes(fastify) {
   });
 
 
-  // afficher toutes les info de bdd enregistrées dans bd_info
+  // affiche toutes les infos des bdd enregistrées dans db_info.
   fastify.get('/databases', async (request, reply) => {
     const databases = new dbManagement();
     try {
@@ -23,7 +23,7 @@ async function routes(fastify) {
   });
 
 
-  // créer une base de données.
+  // crée une bdd.
   fastify.post('/database-create', async (request, reply) => {
     const database = new dbManagement();
     try {
@@ -42,7 +42,7 @@ async function routes(fastify) {
     }
   });
 
-  // afficher une base de données spécifique. 
+  // affiche une bdd.
   fastify.get('/databases/:id', async (request, reply) => {
     const database = new dbManagement();
     try {
@@ -57,7 +57,7 @@ async function routes(fastify) {
   });
 
 
-  // éditer une base de données.
+  // édite une bdd.
   fastify.put('/database/update/:id', async (request, reply) => {
     const database = new dbManagement();
     try {
@@ -76,7 +76,7 @@ async function routes(fastify) {
     }
   });
 
-  // supprimer les infos d'une base de données spécifiques.
+  // supprime une bdd.
   fastify.delete('/database/delete/:id', async (request, reply) => {
     const database = new dbManagement();
     const dbId = request.params.id;
@@ -93,6 +93,7 @@ async function routes(fastify) {
     }
   });
 
+  // affiche tous les backups enregistrés dans la table bakcup.
   fastify.get('/backups', async (request, reply) => {
     const backup = new Backup();
     
@@ -105,6 +106,7 @@ async function routes(fastify) {
     }
   });
 
+  // exécute un dump d'une bdd.
   fastify.post('/backup/:id', async (request, reply) => {
     const { id } = request.params;
     const { destinationDbName } = request.body;

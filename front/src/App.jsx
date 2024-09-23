@@ -1,5 +1,5 @@
 import React from 'react';
-import './style.css';
+import './assets/style/style.css';
 import { Routes, Route, Link } from 'react-router-dom';
 import Dashboard from './components/Dashboard';
 import Databases from './components/Databases';

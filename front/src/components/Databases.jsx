@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import AddDbModal from './AddDbModal';
 import BackupModal from './BackupModal';
-import '../style.css';
+import '../assets/style/style.css';
 
 export default function Databases() {
     const [databases, setDatabases] = useState([]);
@@ -88,6 +88,8 @@ export default function Databases() {
                             <th>name</th>
                             <th>port</th>
                             <th>type</th>
+                            <th>delete</th>
+                            <th>backup</th>
                         </tr>
                     </thead>
                     <tbody>

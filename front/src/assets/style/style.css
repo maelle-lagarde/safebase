@@ -123,7 +123,7 @@ nav li a:hover {
   padding: 10px 40px;
 }
 
-.trash-icon, .dump-icon {
+.trash-icon, .dump-icon, .restore-icon {
   background-color: #141218 !important;
 }
 
@@ -132,6 +132,10 @@ nav li a:hover {
 }
 
 .dump-icon:hover {
+  border: 1px solid #D0BCFF;
+}
+
+.restore-icon:hover {
   border: 1px solid #D0BCFF;
 }
 

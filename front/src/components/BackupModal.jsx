@@ -8,7 +8,7 @@ export default function BackupModal({ isOpen, onClose, onBackup }) {
     useEffect(() => {
         const fetchDatabases = async () => {
             try {
-                const response = await fetch('http://localhost:3000/databases'); // Remplacez par l'URL appropriée
+                const response = await fetch('http://localhost:3000/databases');
                 if (!response.ok) {
                     throw new Error('Erreur lors de la récupération des bases de données');
                 }
@@ -32,7 +32,7 @@ export default function BackupModal({ isOpen, onClose, onBackup }) {
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({ destinationDbName: selectedDestinationDb }), // Utilise le nom ici
+                    body: JSON.stringify({ destinationDbName: selectedDestinationDb }),
                 });
 
                 if (!response.ok) {
@@ -40,8 +40,8 @@ export default function BackupModal({ isOpen, onClose, onBackup }) {
                 }
 
                 const result = await response.json();
-                console.log(result.message); // Afficher le message de succès
-                onClose(); // Fermer la modal après avoir lancé le backup
+                console.log(result.message);
+                onClose();
             } catch (error) {
                 console.error('Erreur lors du backup:', error);
                 alert('Une erreur est survenue lors du backup. Veuillez réessayer.');

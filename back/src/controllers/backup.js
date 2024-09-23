@@ -15,7 +15,7 @@ class Backup {
             const [rows] = await this.dbManager.connection.query(query);
             await this.dbManager.disconnect();
 
-            return rows; // Retourne les résultats
+            return rows;
         } catch (error) {
             console.error('Erreur lors de la récupération des backups:', error);
             throw error;

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import '../style.css';
+import '../assets/style/style.css';
 
 const Connections = () => {
   const [connections, setConnections] = useState([]);
