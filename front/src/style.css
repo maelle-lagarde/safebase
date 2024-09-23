@@ -123,11 +123,15 @@ nav li a:hover {
   padding: 10px 40px;
 }
 
-.trash-icon {
+.trash-icon, .dump-icon {
   background-color: #141218 !important;
 }
 
 .trash-icon:hover {
+  border: 1px solid #D0BCFF;
+}
+
+.dump-icon:hover {
   border: 1px solid #D0BCFF;
 }
 

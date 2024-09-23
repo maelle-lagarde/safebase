@@ -93,18 +93,27 @@ async function routes(fastify) {
     }
   });
 
-  fastify.post('/backup/:id', async (request, reply) => {
-    const { id } = request.params;  // ID de la base de données à backuper
-    const { destinationDbName } = request.body; // Nom de la base de données de destination (si besoin)
-    
-    // Instanciation de la classe Backup
+  fastify.get('/backups', async (request, reply) => {
     const backup = new Backup();
     
     try {
-        // Lancer le processus de backup
+        const backups = await backup.showBackups();
+        reply.code(200).send(backups);
+    } catch (error) {
+        console.error('Erreur lors de la récupération des backups:', error);
+        reply.code(500).send({ error: 'Erreur lors de la récupération des backups.' });
+    }
+  });
+
+  fastify.post('/backup/:id', async (request, reply) => {
+    const { id } = request.params;
+    const { destinationDbName } = request.body;
+    
+    const backup = new Backup();
+    
+    try {
         await backup.runBackup(id, destinationDbName);
         
-        // Répondre avec un message de succès
         reply.code(200).send({ message: 'Backup lancé avec succès.' });
     } catch (error) {
         console.error('Erreur lors du backup:', error);

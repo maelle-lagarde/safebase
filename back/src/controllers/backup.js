@@ -5,33 +5,42 @@ const path = require('path');
 
 class Backup {
     constructor() {
-        this.dbManager = new dbManagement(); // Créer une instance de dbManagement
+        this.dbManager = new dbManagement();
+    }
+
+    async showBackups() {
+        try {
+            const query = 'SELECT * FROM backup;';
+            await this.dbManager.connect();
+            const [rows] = await this.dbManager.connection.query(query);
+            await this.dbManager.disconnect();
+
+            return rows; // Retourne les résultats
+        } catch (error) {
+            console.error('Erreur lors de la récupération des backups:', error);
+            throw error;
+        }
     }
 
     async runBackup(id, destinationDbName) {
         try {
-            // Étape 1: Trouver la base de données source à sauvegarder par ID
             const dbInfo = await this.dbManager.findDatabaseById(id);
 
             if (!dbInfo) {
                 throw new Error(`La base de données avec l'ID ${id} n'a pas été trouvée.`);
             }
 
-            // Étape 2: Vérifier que le répertoire de sauvegarde existe, sinon le créer
-            const backupDir = path.join(__dirname, '../../backup');  // Mettre le chemin correct ici
+            const backupDir = path.join(__dirname, '../../backup');
             if (!fs.existsSync(backupDir)) {
                 fs.mkdirSync(backupDir, { recursive: true });
                 console.log(`Répertoire de sauvegarde créé: ${backupDir}`);
             }
 
-            // Étape 3: Effectuer un dump SQL de la base de données source
             const dumpFileName = `${dbInfo.name}_${new Date().toISOString().replace(/[:.]/g, '-')}.sql`;
             const dumpFilePath = path.join(backupDir, dumpFileName);
 
-            // Commande mysqldump pour créer un fichier de sauvegarde
             const dumpCommand = `mysqldump -u${dbInfo.user} -p${dbInfo.password} -h${dbInfo.host} ${dbInfo.name} > ${dumpFilePath}`;
 
-            // Exécution de la commande de dump
             exec(dumpCommand, (error, stdout, stderr) => {
                 if (error) {
                     console.error(`Erreur lors du dump SQL: ${error.message}`);
@@ -39,7 +48,6 @@ class Backup {
                 }
                 console.log(`Dump SQL créé avec succès: ${dumpFilePath}`);
 
-                // Étape 4: Importer le fichier dump dans la base de données de destination
                 this.importToDestination(dbInfo, destinationDbName, dumpFilePath);
             });
         } catch (error) {
@@ -48,9 +56,7 @@ class Backup {
         }
     }
 
-    // Importer le dump dans la base de données de destination
     importToDestination(dbInfo, destinationDbName, dumpFilePath) {
-        // Commande MySQL pour importer le fichier .sql dans la base de données de destination
         const importCommand = `mysql -u${dbInfo.user} -p${dbInfo.password} -h${dbInfo.host} ${destinationDbName} < ${dumpFilePath}`;
 
         exec(importCommand, (error, stdout, stderr) => {
@@ -60,12 +66,10 @@ class Backup {
             }
             console.log(`Fichier dump importé avec succès dans la base de données ${destinationDbName}.`);
 
-            // Étape 5: Sauvegarder le chemin du dump dans la table backup
             this.saveDumpPath(dumpFilePath, dbInfo.name, destinationDbName);
         });
     }
 
-    // Sauvegarder le chemin du dump dans la table "backup"
     async saveDumpPath(filePath, dbNameSaved, dbNameDestination) {
         try {
             const query = 'INSERT INTO backup (path, date, db_name_saved, db_name_destination) VALUES (?, NOW(), ?, ?)';

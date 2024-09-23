@@ -1,40 +1,64 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import '../style.css';
 
-export default function Backup () {
+export default function Backup() {
+    const [backups, setBackups] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        const fetchBackups = async () => {
+            try {
+                const response = await fetch('http://localhost:3000/backups'); // Remplacez par l'URL appropriée
+                if (!response.ok) {
+                    throw new Error('Erreur lors de la récupération des backups');
+                }
+                const data = await response.json();
+                setBackups(data);
+            } catch (err) {
+                console.error('Erreur lors du fetch des backups:', err);
+                setError(err.message);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchBackups();
+    }, []);
+
+    if (loading) {
+        return <div>Chargement...</div>;
+    }
+
+    if (error) {
+        return <div>Erreur: {error}</div>;
+    }
+
     return (
         <div className="wrapper">
             <h1>Backup</h1>
             <div className="wrapper-result">
-                <div className="select-db">
-                    
-                    <div className="select-1 backup-select">
-                        <label for="databases">Database to save</label>
-                        <select id="databases" name="databases">
-                            <option value="mysql">database_1</option>
-                            <option value="postgresql">database_2</option>
-                            <option value="sqlite">database_3</option>
-                            <option value="mongodb">database_4</option>
-                        </select> 
-                    </div>
-                    
-                    <div className="select-2 backup-select">
-                        <label for="databases">Destination</label>
-                        <select id="databases" name="databases">
-                            <option value="mysql">database_1</option>
-                            <option value="postgresql">database_2</option>
-                            <option value="sqlite">database_3</option>
-                            <option value="mongodb">database_4</option>
-                        </select> 
-                    </div>
-                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Chemin</th>
+                            <th>Date</th>
+                            <th>Base de données sauvegardée</th>
+                            <th>Base de données de destination</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {backups.map((backup, index) => (
+                            <tr key={index}>
+                                <td>{backup.path}</td>
+                                <td>{new Date(backup.date).toLocaleString()}</td>
+                                <td>{backup.db_name_saved}</td>
+                                <td>{backup.db_name_destination}</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
             </div>
-            <button id="add-db-btn">
-                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12 6.75H6.75V12H5.25V6.75H0V5.25H5.25V0H6.75V5.25H12V6.75Z" fill="#381E72"/>
-                </svg>
-                Run backup
-            </button>
         </div>
     );
-};
+}

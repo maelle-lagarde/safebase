@@ -65,22 +65,26 @@ class dbManagement extends Database {
     async createDb({ user, host, name, port, type, password }) {
         try {
             await this.connectToServer();
-
+    
             const createDbQuery = `CREATE DATABASE IF NOT EXISTS \`${name}\`;`;
             await this.connection.query(createDbQuery);
             console.log(`Base de données ${name} créée avec succès.`);
-
+    
             const createUserQuery = `CREATE USER IF NOT EXISTS '${user}'@'${host}' IDENTIFIED BY '${password}';`;
             await this.connection.query(createUserQuery);
             console.log(`Utilisateur ${user} créé avec succès.`);
-
+    
             const grantPrivilegesQuery = `GRANT ALL PRIVILEGES ON \`${name}\`.* TO '${user}'@'${host}';`;
             await this.connection.query(grantPrivilegesQuery);
             console.log(`Privilèges accordés à l'utilisateur ${user} sur la base de données ${name}.`);
-
+    
+            // Flush privileges
+            await this.connection.query('FLUSH PRIVILEGES;');
+            console.log('Privilèges rafraîchis.');
+    
             await this.addDatabase({ user, host, name, port, type, password });
             console.log(`Informations ajoutées dans db_info pour la base de données ${name}.`);
-
+    
             return { message: `Base de données ${name} créée avec succès avec l'utilisateur ${user} sur l'hôte ${host}.` };
         } catch (error) {
             console.error('Erreur lors de la création de la base de données ou de l’utilisateur:', error);
