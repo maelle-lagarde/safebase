@@ -6,7 +6,7 @@ class dbManagement extends Database {
     }
 
     // SHOW all databases info from db_info
-    async  findDatabases(){
+    async  findDatabases() {
         try {
             await this.connect();
 
@@ -106,14 +106,14 @@ class dbManagement extends Database {
             }
             dbInfo = rows[0];
 
-            // supprime les infos de bdd dans db_info
+            // delete row from db_info.
             const deleteQuery = 'DELETE FROM db_info WHERE id = ?';
             const [result] = await this.connection.query(deleteQuery, [id]);
             console.log('Database entry deleted from db_info:', result);
 
             await this.connectToServer();
 
-            // supprime la bdd du server
+            // delete database from server.
             const dropDbQuery = `DROP DATABASE IF EXISTS \`${dbInfo.name}\`;`;
             await this.connection.query(dropDbQuery);
             console.log(`Base de données ${dbInfo.name} supprimée avec succès.`);

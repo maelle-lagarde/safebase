@@ -8,6 +8,7 @@ class Database {
     this.connection = null;
   }
 
+  // connect to server.
   async connectToServer() {
     try {
         this.connection = await mysql.createConnection({
@@ -19,8 +20,8 @@ class Database {
 
         console.log('Connecté au server MySQL');
 
-        // Test de connexion
-        await this.connection.query('SELECT 1'); // Vérification simple
+        // test de connexion.
+        await this.connection.query('SELECT 1');
         console.log('La connexion au serveur MySQL est opérationnelle.');
     } catch (err) {
         console.error('Erreur lors de la connexion au server MySQL:', err.message, err.stack);
@@ -29,7 +30,7 @@ class Database {
 }
 
 
-  // Connect to MySQL database
+  // connect to safebase.
   async connect() {
     try {
       this.connection = await mysql.createConnection({
@@ -47,7 +48,7 @@ class Database {
     }
   }
 
-  // Disconnect from MySQL database
+  // disconnect to safebase.
   async disconnect() {
     try {
       if (this.connection) {

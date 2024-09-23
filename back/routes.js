@@ -1,4 +1,5 @@
 const dbManagement = require('./src/controllers/dbManagement');
+const Backup = require('./src/controllers/backup');
 const fastify = require('fastify')({ logger: true });
 
 async function routes(fastify) {
@@ -89,6 +90,25 @@ async function routes(fastify) {
     } catch (err) {
         console.error('Error deleting database:', err);
         reply.status(500).send({ error: err.message });
+    }
+  });
+
+  fastify.post('/backup/:id', async (request, reply) => {
+    const { id } = request.params;  // ID de la base de données à backuper
+    const { destinationDbName } = request.body; // Nom de la base de données de destination (si besoin)
+    
+    // Instanciation de la classe Backup
+    const backup = new Backup();
+    
+    try {
+        // Lancer le processus de backup
+        await backup.runBackup(id, destinationDbName);
+        
+        // Répondre avec un message de succès
+        reply.code(200).send({ message: 'Backup lancé avec succès.' });
+    } catch (error) {
+        console.error('Erreur lors du backup:', error);
+        reply.code(500).send({ error: 'Échec lors du backup.' });
     }
   });
 }

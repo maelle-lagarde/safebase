@@ -19,7 +19,7 @@ export default function Backup () {
                     </div>
                     
                     <div className="select-2 backup-select">
-                        <label for="databases">Database to save</label>
+                        <label for="databases">Destination</label>
                         <select id="databases" name="databases">
                             <option value="mysql">database_1</option>
                             <option value="postgresql">database_2</option>
