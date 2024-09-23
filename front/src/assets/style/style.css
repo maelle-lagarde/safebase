@@ -100,7 +100,7 @@ nav li a:hover {
   margin-right: 10px;
 }
 
-.select-db {
+/* .select-db {
   display: flex;
   flex-direction: row;
   justify-content: space-around;
@@ -121,7 +121,7 @@ nav li a:hover {
   border-radius: 5px;
   margin-bottom: 10px;
   padding: 10px 40px;
-}
+} */
 
 .trash-icon, .dump-icon, .restore-icon {
   background-color: #141218 !important;
@@ -195,6 +195,11 @@ nav li a:hover {
 }
 
 .input-add-db {
+  display: flex;
+  flex-direction: column;
+}
+
+.db-destination, .db-save {
   display: flex;
   flex-direction: column;
 }

@@ -56,28 +56,28 @@ export default function BackupModal({ isOpen, onClose, onBackup }) {
     return (
         <div className="modal-overlay">
             <div className="modal-content">
-                <h2>Lancer le Backup</h2>
-                <div>
-                    <label>Base de données à sauvegarder:</label>
+                <h2>Run Backup</h2>
+                <div className='db-save'>
+                    <label>Database to save</label>
                     <select value={selectedSourceDb} onChange={(e) => setSelectedSourceDb(e.target.value)}>
-                        <option value="">Sélectionnez une base de données</option>
+                        <option value="">Select one</option>
                         {databases.map((db) => (
                             <option key={db.id} value={db.id}>{db.name}</option>
                         ))}
                     </select>
                 </div>
-                <div>
-                    <label>Base de données de destination:</label>
+                <div className='db-destination'>
+                    <label>Database destination</label>
                     <select value={selectedDestinationDb} onChange={(e) => setSelectedDestinationDb(e.target.value)}>
-                        <option value="">Sélectionnez une base de données</option>
+                        <option value="">Select one</option>
                         {databases.map((db) => (
                             <option key={db.id} value={db.name}>{db.name}</option>
                         ))}
                     </select>
                 </div>
-                <div className="modal-buttons">
-                    <button onClick={handleBackup}>Confirmer</button>
-                    <button onClick={onClose}>Annuler</button>
+                <div style={{ marginTop: "20px" }}>
+                    <button id="save-btn" onClick={handleBackup}>Run</button>
+                    <button id="cancel-btn" style={{ marginLeft: "10px" }} onClick={onClose}>Cancel</button>
                 </div>
             </div>
         </div>
