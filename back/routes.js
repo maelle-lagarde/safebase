@@ -1,5 +1,6 @@
 const dbManagement = require('./src/controllers/dbManagement');
 const Backup = require('./src/controllers/backup');
+const Restore = require('./src/controllers/restore');
 const fastify = require('fastify')({ logger: true });
 
 async function routes(fastify) {
@@ -120,6 +121,36 @@ async function routes(fastify) {
     } catch (error) {
         console.error('Erreur lors du backup:', error);
         reply.code(500).send({ error: 'Échec lors du backup.' });
+    }
+  });
+
+  // récupère un dump.
+  fastify.get('/dump/:id', async (request, reply) => {
+    const { id } = request.params;
+    const restore = new Restore();
+
+    try {
+        const dumpInfo = await restore.getDumpPath(id);
+        reply.code(200).send(dumpInfo);
+    } catch (error) {
+        console.error('Erreur lors de la récupération du dump:', error.message);
+        reply.code(500).send({ error: 'Erreur lors de la récupération du dump.' });
+    }
+  });
+
+  // exécute le restore sur une bdd.
+  fastify.post('/restore/:id', async (request, reply) => {
+    const { id } = request.params;
+    const { destinationDbId } = request.body;
+
+    const restore = new Restore();
+
+    try {
+        await restore.runRestore(id, destinationDbId);
+        reply.code(200).send({ message: 'Restauration lancée avec succès.' });
+    } catch (error) {
+        console.error('Erreur lors de la restauration:', error.message);
+        reply.code(500).send({ error: 'Échec lors de la restauration.' });
     }
   });
 }

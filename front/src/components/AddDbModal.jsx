@@ -1,8 +1,6 @@
 import React, { useState } from "react";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 
-export default function AddDbModal({ isOpen, onClose }) {
+export default function AddDbModal({ isOpen, onClose, onAdd }) {
   const [formData, setFormData] = useState({
     user: "",
     host: "",
@@ -38,7 +36,6 @@ export default function AddDbModal({ isOpen, onClose }) {
 
       const data = await response.json();
       console.log('Base de données ajoutée:', data);
-      toast.success('Base de données ajoutée avec succès!');
 
       setFormData({
         user: "",
@@ -50,10 +47,10 @@ export default function AddDbModal({ isOpen, onClose }) {
       });
 
       onClose();
+      onAdd();
 
     } catch (err) {
       console.error('Erreur:', err.message);
-      toast.error('Erreur lors de l\'ajout de la base de données');
     }
   };
 
@@ -128,21 +125,12 @@ export default function AddDbModal({ isOpen, onClose }) {
           </div>
 
           <div style={{ marginTop: "20px" }}>
-            <button type="submit" id="save-btn">save</button>
-            <button type="button" id="cancel-btn" onClick={onClose} style={{ marginLeft: "10px" }}>
+            <button type="submit" className="modal-save-btn">save</button>
+            <button type="button" className="modal-cancel-btn" onClick={onClose} style={{ marginLeft: "10px" }}>
             cancel
             </button>
           </div>
         </form>
-        <ToastContainer 
-            position="top-right"
-            autoClose={5000}
-            hideProgressBar={false}
-            closeOnClick
-            pauseOnHover
-            draggable
-            theme="light"
-        />
       </div>
     </div>
   );

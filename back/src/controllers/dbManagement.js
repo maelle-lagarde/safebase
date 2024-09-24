@@ -11,7 +11,7 @@ class dbManagement extends Database {
             await this.connect();
 
             const [rows] = await this.connection.query('SELECT id, user, host, name, port, type FROM db_info');
-            console.log(rows);
+            // console.log(rows);
 
             await this.disconnect();
             return rows;
@@ -24,6 +24,25 @@ class dbManagement extends Database {
             }
         }
     }
+
+    async findDatabaseByName(name) {
+        try {
+            const query = 'SELECT * FROM db_info WHERE name = ?;';
+            await this.connect();
+            const [rows] = await this.connection.query(query, [name]);
+            await this.disconnect();
+    
+            if (rows.length === 0) {
+                return null;
+            }
+    
+            return rows[0];
+        } catch (error) {
+            console.error('Erreur lors de la recherche de la base de données par nom:', error);
+            throw error;
+        }
+    }
+    
 
 
     // SELECT database by id

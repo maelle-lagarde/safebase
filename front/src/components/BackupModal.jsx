@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 
-export default function BackupModal({ isOpen, onClose, onBackup }) {
+export default function BackupModal({ isOpen, onClose }) {
     const [databases, setDatabases] = useState([]);
     const [selectedSourceDb, setSelectedSourceDb] = useState('');
     const [selectedDestinationDb, setSelectedDestinationDb] = useState('');
@@ -16,6 +17,7 @@ export default function BackupModal({ isOpen, onClose, onBackup }) {
                 setDatabases(data);
             } catch (error) {
                 console.error('Erreur lors du fetch des bases de données:', error);
+                toast.error("Erreur lors de la récupération des bases de données.");
             }
         };
 
@@ -41,21 +43,22 @@ export default function BackupModal({ isOpen, onClose, onBackup }) {
 
                 const result = await response.json();
                 console.log(result.message);
-                onClose();
+                toast.success("Backup réussi !");
+                onClose(); // Fermez la modale après une sauvegarde réussie
             } catch (error) {
                 console.error('Erreur lors du backup:', error);
-                alert('Une erreur est survenue lors du backup. Veuillez réessayer.');
+                toast.error(`Erreur lors du backup: ${error.message}`);
             }
         } else {
-            alert('Veuillez sélectionner une base de données source et une base de données de destination.');
+            toast.warn('Veuillez sélectionner une base de données source et une base de données de destination.');
         }
     };
 
     if (!isOpen) return null;
 
     return (
-        <div className="modal-overlay">
-            <div className="modal-content">
+        <div className="modal-overlay" onClick={onClose}>
+            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
                 <h2>Run Backup</h2>
                 <div className='db-save'>
                     <label>Database to save</label>
@@ -76,8 +79,8 @@ export default function BackupModal({ isOpen, onClose, onBackup }) {
                     </select>
                 </div>
                 <div style={{ marginTop: "20px" }}>
-                    <button id="save-btn" onClick={handleBackup}>Run</button>
-                    <button id="cancel-btn" style={{ marginLeft: "10px" }} onClick={onClose}>Cancel</button>
+                    <button className="modal-save-btn" onClick={handleBackup}>Run</button>
+                    <button className="modal-cancel-btn" style={{ marginLeft: "10px" }} onClick={onClose}>Cancel</button>
                 </div>
             </div>
         </div>

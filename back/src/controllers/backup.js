@@ -22,52 +22,76 @@ class Backup {
         }
     }
 
+    // Fonction utilitaire pour exécuter une commande shell
+    executeCommand(command) {
+        return new Promise((resolve, reject) => {
+            exec(command, (error, stdout, stderr) => {
+                if (error) {
+                    console.error(`Erreur lors de l'exécution de la commande: ${error.message}`);
+                    reject(error);
+                } else {
+                    resolve(stdout);
+                }
+            });
+        });
+    }
+
     async runBackup(id, destinationDbName) {
         try {
-            const dbInfo = await this.dbManager.findDatabaseById(id);
-
-            if (!dbInfo) {
+            // Récupérer les informations de la base de données source par son ID
+            const dbInfoSource = await this.dbManager.findDatabaseById(id);
+    
+            if (!dbInfoSource) {
                 throw new Error(`La base de données avec l'ID ${id} n'a pas été trouvée.`);
             }
-
+    
+            // Récupérer les informations de la base de données de destination par son nom
+            const dbInfoDestination = await this.dbManager.findDatabaseByName(destinationDbName); // Récupérer la bdd par son nom
+    
+            if (!dbInfoDestination) {
+                throw new Error(`La base de données de destination ${destinationDbName} n'a pas été trouvée.`);
+            }
+    
+            // Créer un répertoire de sauvegarde s'il n'existe pas
             const backupDir = path.join(__dirname, '../../backup');
             if (!fs.existsSync(backupDir)) {
                 fs.mkdirSync(backupDir, { recursive: true });
                 console.log(`Répertoire de sauvegarde créé: ${backupDir}`);
             }
-
-            const dumpFileName = `${dbInfo.name}_${new Date().toISOString().replace(/[:.]/g, '-')}.sql`;
+    
+            // Définir le nom et le chemin du fichier dump
+            const dumpFileName = `${dbInfoSource.name}_${new Date().toISOString().replace(/[:.]/g, '-')}.sql`;
             const dumpFilePath = path.join(backupDir, dumpFileName);
-
-            const dumpCommand = `mysqldump -u${dbInfo.user} -p${dbInfo.password} -h${dbInfo.host} ${dbInfo.name} > ${dumpFilePath}`;
-
+    
+            // Exécuter la commande de dump
+            const dumpCommand = `mysqldump -u${dbInfoSource.user} -p${dbInfoSource.password} -h${dbInfoSource.host} ${dbInfoSource.name} > ${dumpFilePath}`;
+    
             exec(dumpCommand, (error, stdout, stderr) => {
                 if (error) {
                     console.error(`Erreur lors du dump SQL: ${error.message}`);
                     throw error;
                 }
                 console.log(`Dump SQL créé avec succès: ${dumpFilePath}`);
-
-                this.importToDestination(dbInfo, destinationDbName, dumpFilePath);
+    
+                // Après la création du dump, importer dans la base de données de destination
+                this.importToDestination(dbInfoSource, dbInfoDestination.name, dumpFilePath); // Utiliser le nom de la base de destination ici
             });
         } catch (error) {
             console.error(`Erreur lors du backup: ${error.message}`);
             throw error;
         }
-    }
+    }    
+    
 
-    importToDestination(dbInfo, destinationDbName, dumpFilePath) {
+    async importToDestination(dbInfo, destinationDbName, dumpFilePath) {
         const importCommand = `mysql -u${dbInfo.user} -p${dbInfo.password} -h${dbInfo.host} ${destinationDbName} < ${dumpFilePath}`;
 
-        exec(importCommand, (error, stdout, stderr) => {
-            if (error) {
-                console.error(`Erreur lors de l'importation du dump dans la base de données ${destinationDbName}: ${error.message}`);
-                throw error;
-            }
-            console.log(`Fichier dump importé avec succès dans la base de données ${destinationDbName}.`);
+        // Attendre que l'importation soit terminée
+        await this.executeCommand(importCommand);
+        console.log(`Fichier dump importé avec succès dans la base de données ${destinationDbName}.`);
 
-            this.saveDumpPath(dumpFilePath, dbInfo.name, destinationDbName);
-        });
+        // Enregistrer le chemin du dump dans la base de données
+        await this.saveDumpPath(dumpFilePath, dbInfo.name, destinationDbName);
     }
 
     async saveDumpPath(filePath, dbNameSaved, dbNameDestination) {

@@ -100,29 +100,6 @@ nav li a:hover {
   margin-right: 10px;
 }
 
-/* .select-db {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  align-items: center;
-}
-
-.select-1, .select-2 {
-  display: flex;
-  flex-direction: column;
-}
-
-.backup-select select {
-  padding: 10px 40px;
-}
-
-.backup-select label {
-  border: 2px solid #D0BCFF;
-  border-radius: 5px;
-  margin-bottom: 10px;
-  padding: 10px 40px;
-} */
-
 .trash-icon, .dump-icon, .restore-icon {
   background-color: #141218 !important;
 }
@@ -180,17 +157,25 @@ nav li a:hover {
   margin-bottom: 10px;
 }
 
-#save-btn {
+.modal-save-btn {
   padding: 8px 45px;
   background-color: #D0BCFF;
   color: #381E72;
   border: 2px solid transparent;
 }
 
-#cancel-btn {
+.modal-save-btn:hover {
+  border: 2px solid transparent;
+}
+
+.modal-cancel-btn {
   padding: 8px 45px;
   background-color: #2B2634;
   color: #D0BCFF;
+  border: 2px solid #D0BCFF;
+}
+
+.modal-cancel-btn:hover {
   border: 2px solid #D0BCFF;
 }
 
@@ -202,4 +187,34 @@ nav li a:hover {
 .db-destination, .db-save {
   display: flex;
   flex-direction: column;
+}
+
+.wrapper-result.today {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.wrapper-result.today.last {
+  margin-top: 40px;
+}
+
+.resume {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 0 40px;
+  border: 2px solid #D0BCFF;
+  border-radius: 5px;
+  width: 250px;
+  height: 150px;
+} 
+
+.restore-select {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
