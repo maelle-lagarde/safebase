@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import '../assets/style/style.css';
 
-const Connections = () => {
-  const [connections, setConnections] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+export default function Dashboard() {
 
   return (
     <div className="wrapper">
@@ -36,5 +33,3 @@ const Connections = () => {
     </div>
   );
 };
-
-export default Connections;

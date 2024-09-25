@@ -218,3 +218,12 @@ nav li a:hover {
   align-items: center;
   justify-content: center;
 }
+
+.restore-select select {
+  margin-top: 15px;
+  width: 80%;
+}
+
+thead th {
+  vertical-align: top;
+}

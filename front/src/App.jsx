@@ -3,7 +3,6 @@ import './assets/style/style.css';
 import { Routes, Route, Link } from 'react-router-dom';
 import Dashboard from './components/Dashboard';
 import Databases from './components/Databases';
-import Historic from './components/Historic';
 import Backup from './components/Backup';
 import Restore from './components/Restore';
 
@@ -18,15 +17,6 @@ function App() {
                 <path d="M10.5 3.00647L15.75 8.03588V16.7647H13.65V10.0588H7.35V16.7647H5.25V8.03588L10.5 3.00647ZM10.5 0L0 10.0588H3.15V19H9.45V12.2941H11.55V19H17.85V10.0588H21" fill="#D0BCFF"/>
               </svg>
               Dashboard
-            </Link>
-          </li>
-
-          <li>
-            <Link to="/historic">
-              <svg width="21" height="23" viewBox="0 0 21 23" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M14.175 15.1866L17.178 16.9571L16.3905 18.2352L12.6 15.9723V10.7342H14.175V15.1866ZM21 14.9247C21 18.979 17.7135 22.2581 13.65 22.2581C11.1405 22.2581 8.925 21.0009 7.6125 19.1152C3.3495 18.8952 0 17.1038 0 14.9247V4.44853C0 2.13329 3.759 0.258057 8.4 0.258057C13.041 0.258057 16.8 2.13329 16.8 4.44853V8.30377C19.278 9.48758 21 12.0019 21 14.9247ZM14.7 7.6752V7.21425C14.4585 7.35044 14.175 7.48663 13.902 7.59139C14.175 7.59139 14.4375 7.63329 14.7 7.6752ZM2.1 4.44853C2.1 4.97234 4.3365 6.54377 8.4 6.54377C12.4635 6.54377 14.7 4.97234 14.7 4.44853C14.7 3.92472 12.4635 2.35329 8.4 2.35329C4.3365 2.35329 2.1 3.92472 2.1 4.44853ZM2.1 10.1581C3.2235 10.9752 5.04 11.5304 7.056 11.7085C7.6965 10.3885 8.736 9.28853 10.017 8.5552C9.492 8.60758 8.9565 8.63901 8.4 8.63901C5.8905 8.63901 3.6435 8.08377 2.1 7.21425V10.1581ZM6.573 16.8838C6.405 16.2552 6.3 15.6057 6.3 14.9247C6.3 14.5162 6.342 14.1181 6.405 13.7304C4.788 13.5523 3.3075 13.1752 2.1 12.5885V14.9247C2.1 15.3647 3.675 16.4962 6.573 16.8838ZM18.9 14.9247C18.9 12.0333 16.548 9.68663 13.65 9.68663C10.752 9.68663 8.4 12.0333 8.4 14.9247C8.4 17.8162 10.752 20.1628 13.65 20.1628C16.548 20.1628 18.9 17.8162 18.9 14.9247Z" fill="#D0BCFF"/>
-              </svg>
-              Historic
             </Link>
           </li>
 
@@ -72,7 +62,6 @@ function App() {
       <Routes>
         <Route path="/" element={<Dashboard />} />
         <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/historic" element={<Historic />} />
         <Route path="/databases" element={<Databases />} />
         <Route path="/backup" element={<Backup />} />
         <Route path="/restore" element={<Restore />} />

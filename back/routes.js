@@ -108,33 +108,17 @@ async function routes(fastify) {
   });
 
   // exécute un dump d'une bdd.
-  fastify.post('/backup/:id', async (request, reply) => {
-    const { id } = request.params;
-    const { destinationDbName } = request.body;
-    
+  fastify.post('/backup/:id', async (request, reply) => {  
     const backup = new Backup();
+    const { id } = request.params;  
     
     try {
-        await backup.runBackup(id, destinationDbName);
+        await backup.runBackup(id);
         
         reply.code(200).send({ message: 'Backup lancé avec succès.' });
     } catch (error) {
         console.error('Erreur lors du backup:', error);
         reply.code(500).send({ error: 'Échec lors du backup.' });
-    }
-  });
-
-  // récupère un dump.
-  fastify.get('/dump/:id', async (request, reply) => {
-    const { id } = request.params;
-    const restore = new Restore();
-
-    try {
-        const dumpInfo = await restore.getDumpPath(id);
-        reply.code(200).send(dumpInfo);
-    } catch (error) {
-        console.error('Erreur lors de la récupération du dump:', error.message);
-        reply.code(500).send({ error: 'Erreur lors de la récupération du dump.' });
     }
   });
 
@@ -151,6 +135,19 @@ async function routes(fastify) {
     } catch (error) {
         console.error('Erreur lors de la restauration:', error.message);
         reply.code(500).send({ error: 'Échec lors de la restauration.' });
+    }
+  });
+
+  // affiche tous les restore enregistrés dans la table restore.
+  fastify.get('/restores', async (request, reply) => {
+    const restore = new Restore();
+    
+    try {
+        const restores = await restore.showRestores();
+        reply.code(200).send(restores);
+    } catch (error) {
+        console.error('Erreur lors de la récupération des restores:', error);
+        reply.code(500).send({ error: 'Erreur lors de la récupération des restores.' });
     }
   });
 }

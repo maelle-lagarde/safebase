@@ -43,8 +43,6 @@ class dbManagement extends Database {
         }
     }
     
-
-
     // SELECT database by id
     async findDatabaseById(id) {
         // console.log('Database ID:', request.params.id);
@@ -115,7 +113,6 @@ class dbManagement extends Database {
             }
         }
     }
-
     
     // DELETE database by id
     async deleteDatabase(id) {

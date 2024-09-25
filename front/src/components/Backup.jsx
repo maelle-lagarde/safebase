@@ -32,7 +32,6 @@ export default function Backup() {
         fetchBackups();
     }, []);
 
-    // ouvre la RestoreModal()
     const openRestoreModal = (backupId) => {
         setSelectedBackupId(backupId);
         setIsModalOpen(true);
@@ -43,11 +42,9 @@ export default function Backup() {
         setSelectedBackupId(null);
     };
 
-    // Callback à exécuter après une restauration réussie
     const handleRestoreSuccess = () => {
         closeRestoreModal();
         toast.success("Restauration réussie !");
-        // Optionnel : tu peux ajouter ici du code pour mettre à jour la liste des backups si nécessaire
     };
 
     if (loading) {
@@ -68,7 +65,6 @@ export default function Backup() {
                             <th>Path</th>
                             <th>Date</th>
                             <th>Database saved</th>
-                            <th>Database destination</th>
                             <th>Restore</th>
                         </tr>
                     </thead>
@@ -78,7 +74,6 @@ export default function Backup() {
                                 <td>{backup.path}</td>
                                 <td>{new Date(backup.date).toLocaleString()}</td>
                                 <td>{backup.db_name_saved}</td>
-                                <td>{backup.db_name_destination}</td>
                                 <td>
                                     <button className="restore-icon" onClick={() => openRestoreModal(backup.id)}>
                                         <svg width="19" height="21" viewBox="0 0 19 21" fill="none" xmlns="http://www.w3.org/2000/svg">

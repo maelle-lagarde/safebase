@@ -56,7 +56,7 @@ export default function RestoreModal({ isOpen, onClose, onRestore, backupId }) {
                 <div className="modal-content" onClick={(e) => e.stopPropagation()}>
                     <h2>Restore</h2>
                     <div className='restore-select'>
-                        <label>Select a database destination :</label>
+                        <label>Select a database destination</label>
                         <select
                             value={selectedDestinationDb}
                             onChange={(e) => setSelectedDestinationDb(e.target.value)}
