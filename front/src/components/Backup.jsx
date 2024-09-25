@@ -6,7 +6,6 @@ import '../assets/style/style.css';
 
 export default function Backup() {
     const [backups, setBackups] = useState([]);
-    const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedBackupId, setSelectedBackupId] = useState(null);
@@ -24,8 +23,6 @@ export default function Backup() {
                 console.error('Erreur lors du fetch des backups:', err);
                 toast.error(err.message);
                 setError(err.message);
-            } finally {
-                setLoading(false);
             }
         };
 
@@ -46,10 +43,6 @@ export default function Backup() {
         closeRestoreModal();
         toast.success("Restauration réussie !");
     };
-
-    if (loading) {
-        return <div>Chargement...</div>;
-    }
 
     if (error) {
         return <div>Erreur: {error}</div>;

@@ -6,7 +6,6 @@ import '../assets/style/style.css';
 
 export default function Databases() {
     const [databases, setDatabases] = useState([]);
-    const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -19,11 +18,9 @@ export default function Databases() {
                 }
                 const data = await response.json();
                 setDatabases(data);
-                setLoading(false);
             } catch (err) {
                 console.error('Erreur lors de la requête:', err);
                 setError(err.message);
-                setLoading(false);
             }
         };
 
@@ -38,7 +35,7 @@ export default function Databases() {
         setIsModalOpen(false);
     };
 
-    // Callback à exécuter après un ajout réussi
+    // callback à exécuter après un ajout réussi
     const handleAddDbSuccess = () => {
         closeModal();
         toast.success("Base de données ajoutée avec succès !");
@@ -86,10 +83,6 @@ export default function Databases() {
             toast.error(`Erreur: ${err.message}`);
         }
     };
-
-    if (loading) {
-        return <div>Chargement...</div>;
-    }
 
     if (error) {
         return <div>Erreur: {error}</div>;

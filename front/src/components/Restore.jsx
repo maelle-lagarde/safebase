@@ -3,7 +3,6 @@ import '../assets/style/style.css';
 
 export default function Restore () {
     const [restores, setRestores] = useState([]);
-    const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
     useEffect(() => {
@@ -18,17 +17,11 @@ export default function Restore () {
             } catch (err) {
                 console.error('Erreur lors du fetch des restores:', err);
                 setError(err.message);
-            } finally {
-                setLoading(false);
             }
         };
 
         fetchRestores();
     }, []);
-
-    if (loading) {
-        return <div>Chargement...</div>;
-    }
 
     if (error) {
         return <div>Erreur: {error}</div>;

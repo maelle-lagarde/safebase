@@ -3,7 +3,6 @@ import '../assets/style/style.css';
 
 export default function Dashboard() {
     const [stats, setStats] = useState([]);
-    const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
     useEffect(() => {
@@ -18,17 +17,11 @@ export default function Dashboard() {
             } catch (err) {
                 console.error('Erreur lors du fetch des statistiques:', err);
                 setError(err.message);
-            } finally {
-                setLoading(false);
             }
         };
 
         fetchStats();
     }, []);
-
-    if (loading) {
-        return <div>Chargement des statistiques...</div>;
-    }
 
     if (error) {
         return <div>Erreur: {error}</div>;
@@ -36,7 +29,7 @@ export default function Dashboard() {
 
     return (
         <div className="wrapper">
-            <h1>welcome</h1>
+            <h1>welcome bitch.</h1>
             <div className='wrapper-result today'> 
                 <div className='resume' id='nb-databases'>
                     <h3>{stats.databases} databases</h3>
