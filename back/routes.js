@@ -1,6 +1,7 @@
 const dbManagement = require('./src/controllers/dbManagement');
 const Backup = require('./src/controllers/backup');
 const Restore = require('./src/controllers/restore');
+const Stats = require('./src/controllers/stats');
 const fastify = require('fastify')({ logger: true });
 
 async function routes(fastify) {
@@ -150,6 +151,27 @@ async function routes(fastify) {
         reply.code(500).send({ error: 'Erreur lors de la récupération des restores.' });
     }
   });
+
+  // Route pour obtenir les statistiques
+  fastify.get('/stats', async (request, reply) => {
+    const stats = new Stats();
+    
+    try {
+        const databasesCount = await stats.countDatabases();
+        const restoresCount = await stats.countRestores();
+        const backupsCount = await stats.countBackups();
+
+        reply.code(200).send({
+            databases: databasesCount,
+            restores: restoresCount,
+            backups: backupsCount,
+        });
+    } catch (error) {
+        console.error('Erreur lors de la récupération des statistiques:', error.message);
+        reply.code(500).send({ error: 'Échec lors de la récupération des statistiques.' });
+    }
+  });
+
 }
 
 module.exports = routes;
