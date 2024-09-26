@@ -48,7 +48,8 @@ class dbManagement extends Database {
         // console.log('Database ID:', request.params.id);
         try {
             await this.connect();
-            const [rows] = await this.connection.query('SELECT * FROM db_info WHERE id = ?', [id]);
+            // const [rows] = await this.connection.query('SELECT * FROM db_info WHERE id = ?', [id]);
+            const [rows] = await this.connection.query('SELECT * FROM db_info WHERE id = 24');
             await this.disconnect();
             return rows[0];
         } catch (error) {

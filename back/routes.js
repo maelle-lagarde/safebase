@@ -173,79 +173,44 @@ async function routes(fastify) {
     }
   });
 
-  // affiche les crons exécutés.
-  fastify.get('/crons', async (request, reply) => {
-    const cron = new Cron();
+  // affiche les crons exécutés
+  fastify.get('/cron', async (request, reply) => {
+    const cronManager = new Cron();
     try {
-      const crons = await cron.getCrons();
-      console.log(crons);
-      reply.code(200).send(crons);
-    } catch (err) {
-      console.error('Error fetching crons:', err);
-      reply.status(500).send({ error: err.message });
-    }
-  });
-
-  // lance un cron.
-  fastify.post('/cron', async (request, reply) => {
-    const cron = new Cron();
-    const { db_name, cron_format } = request.body;
-
-    if (!db_name || !cron_format) {
-        return reply.status(400).send({
-            error: 'db_name et cron_format sont requis',
-        });
-    }
-
-    try {
-        await cron.saveCron(db_name, cron_format);
-
-        switch (cron_format) {
-            case '* * * * *': // chaque minute
-                await cron.runCronMinutes(db_name);
-                break;
-            case '0 * * * *': // chaque heure
-                await cron.runCronHours(db_name);
-                break;
-            case '0 7 * * *': // tous les jours à 7:00
-                await cron.runCronDays(db_name);
-                break;
-            default:
-                return reply.status(400).send({
-                    error: `Format de cron non valide: ${cron_format}`,
-                });
-        }
-
-        reply.status(201).send({
-            message: `Cron planifié avec succès pour la base ${db_name}`,
-            db_name: db_name,
-            cron_format: cron_format,
-        });
+        const activeCrons = await cronManager.showActiveCronJobs(); // Assurez-vous que cette méthode renvoie un tableau
+        reply.code(200).send(activeCrons);
     } catch (error) {
-        reply.status(500).send({
-            error: 'Erreur lors de l\'ajout ou de la planification du cron',
-            details: error.message,
-        });
+        fastify.log.error(error);
+        reply.code(500).send({ error: 'Failed to retrieve cron jobs', details: error.message });
     }
-  });
+});
 
-  // supprime un cron.
-  fastify.delete('/crons/delete/:id', async (request, reply) => {
-    const cron = new Cron();
-    const cronId = request.params.id;
+
+  // lance un cron
+  fastify.post('/cron', async (request, reply) => {
+    const cronManager = new Cron();
     try {
-      const result = await cron.deleteCron(cronId);
-      if (result.affectedRows === 0) {
-        reply.status(404).send({ message: 'Database not found' });
-      } else {
-        reply.send({ message: 'Database deleted successfully' });
-      }
-    } catch (err) {
-        console.error('Error deleting database:', err);
-        reply.status(500).send({ error: err.message });
+        const { frequency, taskName, dbId } = request.body;
+        await cronManager.createCronJob(frequency, taskName, dbId);
+        reply.code(201).send({ message: 'Cron job created', taskName });
+    } catch (error) {
+        fastify.log.error(error);
+        reply.code(500).send({ error: 'Failed to create cron job', details: error.message });
     }
   });
 
+  // supprime un cron
+  fastify.delete('/cron/:taskName', async (request, reply) => {
+    const cronManager = new Cron();
+    try {
+        const { taskName } = request.params;
+        await cronManager.deleteCronJob(taskName);
+        reply.code(200).send({ message: 'Cron job deleted', taskName });
+    } catch (error) {
+        fastify.log.error(error);
+        reply.code(500).send({ error: 'Failed to delete cron job', details: error.message });
+    }
+  });
 }
 
 module.exports = routes;

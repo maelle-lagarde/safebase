@@ -29,7 +29,7 @@ export default function Dashboard() {
 
     return (
         <div className="wrapper">
-            <h1>welcome bitch.</h1>
+            <h1>Welcome</h1>
             <div className='wrapper-result today'> 
                 <div className='resume' id='nb-databases'>
                     <h3>{stats.databases} databases</h3>

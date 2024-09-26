@@ -68,7 +68,7 @@ export default function Databases() {
     const runBackup = async (dbId) => {
         try {
             const response = await fetch(`http://localhost:3000/backup/${dbId}`, {
-                method: 'POST', // Si la méthode est différente, adapte en conséquence
+                method: 'POST',
             });
 
             if (!response.ok) {
