@@ -73,6 +73,7 @@ export default function Cron() {
     // handle cron job deletion
     const handleDeleteCron = async (taskName) => {
         try {
+            console.log("Attempting to delete task:", taskName); // Log du taskName
             const response = await fetch(`http://localhost:3000/cron/${taskName}`, {
                 method: 'DELETE',
             });
@@ -87,6 +88,7 @@ export default function Cron() {
             setError(err.message);
         }
     };
+    
 
     if (error) {
         return <div>Erreur: {error}</div>;

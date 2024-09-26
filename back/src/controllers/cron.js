@@ -29,7 +29,7 @@ class Cron {
         const task = cron.schedule(schedule, async () => {
             console.log(`Executing task: ${taskName}`);
             try {
-                await this.backupManager.runBackup(dbId); // Appelle la méthode runBackup avec l'ID de la base de données
+                await this.backupManager.runBackup(dbId);
             } catch (error) {
                 console.error(`Error running backup for task ${taskName}:`, error.message);
             }
@@ -37,6 +37,7 @@ class Cron {
 
         this.tasks.push({ taskName, schedule, task });
         console.log(`Created task: ${taskName} with schedule: ${schedule}`);
+        console.log("Current tasks:", this.tasks);
     }
 
     // affiche les tâches crons actives
@@ -53,16 +54,18 @@ class Cron {
 
     // supprime une tâche cron
     async deleteCronJob(taskName) {
+        console.log("Trying to delete task:", taskName); // Ajout du log
         const taskIndex = this.tasks.findIndex(t => t.taskName === taskName);
-
+    
         if (taskIndex !== -1) {
+            console.log("Found task:", this.tasks[taskIndex]); // Ajout du log
             this.tasks[taskIndex].task.stop();
             this.tasks.splice(taskIndex, 1);
             console.log(`Deleted task: ${taskName}`);
         } else {
             console.log(`Task not found: ${taskName}`);
         }
-    }
-};
+    };
+}    
 
 module.exports = Cron;

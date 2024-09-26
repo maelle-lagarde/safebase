@@ -5,6 +5,8 @@ const Stats = require('./src/controllers/stats');
 const Cron = require('./src/controllers/cron');
 const fastify = require('fastify')({ logger: true });
 
+const cronManager = new Cron();
+
 async function routes(fastify) {
 
   fastify.get('/', async (request, reply) => {
@@ -175,9 +177,8 @@ async function routes(fastify) {
 
   // affiche les crons exécutés
   fastify.get('/cron', async (request, reply) => {
-    const cronManager = new Cron();
     try {
-        const activeCrons = await cronManager.showActiveCronJobs(); // Assurez-vous que cette méthode renvoie un tableau
+        const activeCrons = await cronManager.showActiveCronJobs();
         reply.code(200).send(activeCrons);
     } catch (error) {
         fastify.log.error(error);
@@ -188,9 +189,8 @@ async function routes(fastify) {
 
   // lance un cron
   fastify.post('/cron', async (request, reply) => {
-    const cronManager = new Cron();
+    const { frequency, taskName, dbId } = request.body;
     try {
-        const { frequency, taskName, dbId } = request.body;
         await cronManager.createCronJob(frequency, taskName, dbId);
         reply.code(201).send({ message: 'Cron job created', taskName });
     } catch (error) {
@@ -201,16 +201,17 @@ async function routes(fastify) {
 
   // supprime un cron
   fastify.delete('/cron/:taskName', async (request, reply) => {
-    const cronManager = new Cron();
+    const { taskName } = request.params;
+    console.log("Requested taskName to delete:", taskName); // Ajout du log
     try {
-        const { taskName } = request.params;
+        console.log("Active Cron Jobs before deletion:", await cronManager.showActiveCronJobs());
         await cronManager.deleteCronJob(taskName);
-        reply.code(200).send({ message: 'Cron job deleted', taskName });
+        reply.code(200).send({ message: `Cron job ${taskName} deleted successfully` });
     } catch (error) {
         fastify.log.error(error);
         reply.code(500).send({ error: 'Failed to delete cron job', details: error.message });
     }
-  });
+});
 }
 
 module.exports = routes;
