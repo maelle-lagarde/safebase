@@ -38,7 +38,7 @@ export default function Databases() {
     // callback à exécuter après un ajout réussi
     const handleAddDbSuccess = () => {
         closeModal();
-        toast.success("Base de données ajoutée avec succès !");
+        toast.success("Database successfully added!");
     };
 
     const deleteDb = async (dbId) => {
@@ -58,7 +58,7 @@ export default function Databases() {
             console.log(result.message);
 
             setDatabases((prevDatabases) => prevDatabases.filter((db) => db.id !== dbId));
-            toast.success("Base de données supprimée avec succès !");
+            toast.success("Database successfully deleted!");
         } catch (err) {
             console.error('Erreur lors de la suppression:', err.message);
             toast.error(`Erreur: ${err.message}`);
@@ -76,11 +76,11 @@ export default function Databases() {
             }
 
             const result = await response.json();
-            toast.success(`Sauvegarde réussie pour la base de données ID: ${dbId}!`);
+            toast.success(`Database successfully backed up!`);
             console.log(result);
         } catch (err) {
             console.error('Erreur lors de la sauvegarde:', err.message);
-            toast.error(`Erreur: ${err.message}`);
+            toast.error(`Error: ${err.message}`);
         }
     };
 
@@ -144,7 +144,7 @@ export default function Databases() {
                 <AddDbModal 
                   isOpen={isModalOpen}
                   onClose={closeModal} 
-                  onAddDbSuccess={handleAddDbSuccess}
+                  onAdd={handleAddDbSuccess}
                 />
                 <ToastContainer 
                   position="top-right"

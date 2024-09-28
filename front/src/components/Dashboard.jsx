@@ -32,15 +32,18 @@ export default function Dashboard() {
             <h1>Welcome</h1>
             <div className='wrapper-result today'> 
                 <div className='resume' id='nb-databases'>
-                    <h3>{stats.databases} databases</h3>
+                    <p className='nb-stat'>{stats.databases}</p>
+                    <h3>databases</h3>
                     <p>ready to be used</p>   
                 </div>
                 <div className='resume' id='nb-backup'>
-                    <h3>{stats.backups} backups</h3>
+                    <p className='nb-stat'>{stats.backups}</p>
+                    <h3>backups</h3>
                     <p>have been executed</p>
                 </div>
                 <div className='resume' id='nb-restore'>
-                    <h3>{stats.restores} restorations</h3>
+                    <p className='nb-stat'>{stats.restores}</p>
+                    <h3>restorations</h3>
                     <p>have been executed</p>
                 </div>
             </div>

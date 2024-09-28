@@ -1,9 +1,10 @@
 #root {
-  height: 100vh;
+  height: auto;
   width: 100%;
   background-color: #141218;
   color: #D0BCFF;
   text-align: center;
+  padding-bottom: 100px;
 }
 
 body {
@@ -78,6 +79,7 @@ nav li a:hover {
 .wrapper-result tbody tr {
   border: 1px solid #D0BCFF;
   border-radius: 5px;
+  vertical-align: top;
 }
 
 #add-db-btn {
@@ -157,7 +159,7 @@ nav li a:hover {
   margin-bottom: 10px;
 }
 
-.modal-save-btn {
+.modal-save-btn, .cron-save-btn {
   padding: 8px 45px;
   background-color: #D0BCFF;
   color: #381E72;
@@ -165,6 +167,10 @@ nav li a:hover {
 }
 
 .modal-save-btn:hover {
+  border: 2px solid transparent;
+}
+
+.cron-save-btn:hover {
   border: 2px solid transparent;
 }
 
@@ -205,12 +211,17 @@ nav li a:hover {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 0 40px;
+  padding: 40px;
   border: 2px solid #D0BCFF;
   border-radius: 5px;
   width: 250px;
-  height: 150px;
-} 
+  height: 70px;
+}
+
+.nb-stat {
+  font-size: 40px;
+  font-weight: 900;
+}
 
 .restore-select {
   display: flex;
@@ -228,10 +239,49 @@ thead th {
   vertical-align: top;
 }
 
-#cron-form {
+.cron-result {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.cron-form {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 50%;
+}
+
+.cron-form select {
+  background-color: #141218;
+  border: 1px solid #D0BCFF;
+  border-radius: 5px;
+  color: #D0BCFF;
+  padding: 10px;
+  margin-bottom: 10px;
+  margin-left: 10px;
+  width: 250px;
+}
+
+.cron-form label {
+  margin-bottom: 10px;
+}
+
+.cron-save-btn {
+  width: 150px;
+}
+
+.cron-jobs-saved {
+  margin-top: 40px;
+  width: 40%;
+}
+
+.cron-jobs-saved li {
+  list-style: none;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
 }

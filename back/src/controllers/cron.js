@@ -54,11 +54,11 @@ class Cron {
 
     // supprime une tâche cron
     async deleteCronJob(taskName) {
-        console.log("Trying to delete task:", taskName); // Ajout du log
+        console.log("Trying to delete task:", taskName);
         const taskIndex = this.tasks.findIndex(t => t.taskName === taskName);
     
         if (taskIndex !== -1) {
-            console.log("Found task:", this.tasks[taskIndex]); // Ajout du log
+            console.log("Found task:", this.tasks[taskIndex]);
             this.tasks[taskIndex].task.stop();
             this.tasks.splice(taskIndex, 1);
             console.log(`Deleted task: ${taskName}`);

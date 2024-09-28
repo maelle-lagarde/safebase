@@ -41,7 +41,7 @@ export default function Backup() {
 
     const handleRestoreSuccess = () => {
         closeRestoreModal();
-        toast.success("Restauration réussie !");
+        toast.success("Successful restoration!");
     };
 
     if (error) {
