@@ -237,6 +237,7 @@ nav li a:hover {
 
 thead th {
   vertical-align: top;
+  margin-bottom: 20px;
 }
 
 .cron-result {
